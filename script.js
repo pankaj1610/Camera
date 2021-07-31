@@ -9,29 +9,21 @@ let isRecording = false;
 let filter = "";
 let zoomInBtn = document.querySelector(".zoom-in");
 let zoomOutBtn = document.querySelector(".zoom-out");
-let height = 90;
+let currZoom = 1;
 
 //-----------zoom-in-work---------------------
 zoomInBtn.addEventListener("click", function () {
-  height += 35;
-  if (height <= 160) {
-    videoPlayer.style.height = `${height}%`;
-    videoPlayer.style.top = 0;
-  } else {
-    height = 160;
-  }
+  currZoom += 0.1;
+  if(currZoom > 3) currZoom = 3;
+  videoPlayer.style.transform = `scale(${currZoom})`;
 });
 
 // ---------------zoom-out-work-------------------------
 zoomOutBtn.addEventListener("click", function () {
-  height -= 35;
-  if (height >= 89) {
-    videoPlayer.style.height = `${height}%`;
-    videoPlayer.style.top = `2rem`;
-  } else {
-    height = 90;
-    videoPlayer.style.top = `2rem`;
-  }
+  currZoom -= 1;
+  if(currZoom < 1) currZoom = 1;
+  videoPlayer.style.transform = `scale(${currZoom})`;
+
 });
 
 // -------------Processing Filter---------------
@@ -61,6 +53,10 @@ captureBtn.addEventListener("click", function () {
   canvas.width = videoPlayer.videoWidth;
   canvas.height = videoPlayer.videoHeight;
   let tool = canvas.getContext("2d");
+  
+  tool.translate(canvas.width / 2, canvas.height / 2);
+  tool.scale(currZoom, currZoom);
+  tool. translate(-canvas.width / 2, -canvas.height / 2);
   tool.drawImage(videoPlayer, 0, 0);
 
   if (filter != "") {
@@ -93,6 +89,9 @@ recordBtn.addEventListener("click", function () {
   } else {
     innerSpan.classList.add("record-animation");
     mediaRecorder.start();
+    currZoom = 1;
+    videoPlayer.style.transform = `scale${currZoom}`;
+    
     isRecording = true;
   }
 });
