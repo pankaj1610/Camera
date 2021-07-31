@@ -20,7 +20,7 @@ zoomInBtn.addEventListener("click", function () {
 
 // ---------------zoom-out-work-------------------------
 zoomOutBtn.addEventListener("click", function () {
-  currZoom -= 1;
+  currZoom -= 0.1;
   if(currZoom < 1) currZoom = 1;
   videoPlayer.style.transform = `scale(${currZoom})`;
 
